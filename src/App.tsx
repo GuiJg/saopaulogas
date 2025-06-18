@@ -1,36 +1,57 @@
 import { Button } from "primereact/button";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
+import { useEffect, useState } from "react";
+import { Sidebar } from "primereact/sidebar";
 
 export default function App() {
+  const [menuOpen] = useState(false);
+  const [visibleRight, setVisibleRight] = useState(false);
+  const [scrolling, setScrolling] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = (): void => {
+      const scrollTop = window.scrollY;
+      const isScrolling = scrollTop > 0;
+      setScrolling(isScrolling);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return (): void => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
-      <header className="flex justify-around items-center gap-4 !p-4">
+      <header
+        className={`flex justify-around items-center gap-4 !p-4 fixed w-full z-50 ${
+          scrolling || menuOpen ? "scrolled" : ""
+        }`}
+      >
         <div className="flex">
           <img src="logo.png" alt="Logo" className="" />
         </div>
         <nav className="flex justify-center items-center gap-4">
           <a
             href="#"
-            className="uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300"
+            className="uppercase font-semibold text-white hover:text-blue-600 transition-colors duration-300"
           >
             Página Inicial
           </a>
           <a
             href="#sobre"
-            className="uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300"
+            className="uppercase font-semibold text-white hover:text-blue-600 transition-colors duration-300"
           >
             Sobre nós
           </a>
           <a
             href="#servicos"
-            className="uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300"
+            className="uppercase font-semibold text-white hover:text-blue-600 transition-colors duration-300"
           >
             Serviços
           </a>
           <a
             href="#contatos"
-            className="uppercase font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300"
+            className="uppercase font-semibold text-white hover:text-blue-600 transition-colors duration-300"
           >
             Contatos
           </a>
@@ -39,6 +60,48 @@ export default function App() {
           Solicitar Orçamento
         </Button>
       </header>
+
+      <Sidebar
+        visible={visibleRight}
+        position="right"
+        onHide={() => setVisibleRight(false)}
+      >
+        <div className="flex flex-col justify-center items-start gap-3 !p-8">
+          <a href="#" className="flex w-40">
+            <img src="Logo-sidebar.png" alt="" className="w-full" />
+          </a>
+          <a
+            href="#"
+            className="text-[#1e1e1e] text-xl !pb-2 !pt-4 border-b-2 border-transparent hover:font-bold hover:border-[#1e1e1e] transition-all"
+          >
+            Página Inicial
+          </a>
+          <a
+            href="#solucoes"
+            className="text-[#1e1e1e] text-xl !pb-2 border-b-2 border-transparent hover:font-bold hover:border-[#1e1e1e] transition-all"
+          >
+            Soluções
+          </a>
+          <a
+            href="#sobre"
+            className="text-[#1e1e1e] text-xl !pb-2 border-b-2 border-transparent hover:font-bold hover:border-[#1e1e1e] transition-all"
+          >
+            Sobre Nós
+          </a>
+          <a
+            href="#portfolio"
+            className="text-[#1e1e1e] text-xl !pb-2 border-b-2 border-transparent hover:font-bold hover:border-[#1e1e1e] transition-all"
+          >
+            Portfólio
+          </a>
+          <a
+            href="#contatos"
+            className="text-[#1e1e1e] text-xl !pb-2 border-b-2 border-transparent hover:font-bold hover:border-[#1e1e1e] transition-all"
+          >
+            Contatos
+          </a>
+        </div>
+      </Sidebar>
 
       <Routes>
         <Route path="/" element={<Home />} key="home" />
@@ -91,9 +154,7 @@ export default function App() {
           </div>
         </div>
         <div className="flex flex-col justify-center items-start gap-4">
-          <h2 className="font-bold">
-            Serviços
-          </h2>
+          <h2 className="font-bold">Serviços</h2>
           <div className="flex flex-col justify-center items-start gap-4">
             <a
               href="#"
@@ -122,13 +183,13 @@ export default function App() {
           </div>
         </div>
         <div className="flex flex-col justify-center items-start gap-4">
-          <h2 className="font-bold">
-            Encontre-nos
-          </h2>
+          <h2 className="font-bold">Encontre-nos</h2>
           <div className="flex flex-col justify-center items-start gap-4">
             <div className="flex justify-center items-center gap-4">
               <i className="pi pi-pin"></i>
-              <span>Rua (nome da rua) - (número), (cidade - estado) - (cep)</span>
+              <span>
+                Rua (nome da rua) - (número), (cidade - estado) - (cep)
+              </span>
             </div>
           </div>
         </div>
